@@ -22,3 +22,10 @@ namespace two_sum
   };
 #define two_sum_fun(func) exc.registerMemberFunction(#func, &two_sum::Solution::func);
 } // namespace two_sum
+int main()
+{
+  Excecutor<two_sum::Solution, false> exc("../resource/all/1.txt");
+  exc.instance = exc.createInstance<void>();
+  two_sum_fun(twoSum);
+  exc.run();
+}

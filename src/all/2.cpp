@@ -47,7 +47,7 @@ namespace add_two_numbers
 
 int main()
 {
-    Excecutor<add_two_numbers::Solution, true> exc("D:\\Code\\VS\\LeetCode\\resource\\all\\2.txt");
+    Excecutor<add_two_numbers::Solution, false> exc("../resource/all/2.txt");
     exc.instance = exc.createInstance<void>();
     add_two_numbers_fun(addTwoNumbers);
     exc.run();

@@ -1,5 +1,9 @@
 #include "../header.h"
-
+/***
+ * 
+ * 倒叙 逢十进一
+ * 
+ * **/
 namespace add_two_numbers
 {
 

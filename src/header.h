@@ -30,7 +30,7 @@
 #include <utility>
 #include <variant>
 #include <vector>
-#include <fmt/core.h>
+// #include <bits/stdc++.h>
 
 template <typename T>
 struct function_traits;
@@ -45,7 +45,7 @@ struct function_traits<Ret(Args...)>
 	using function_type = Ret(Args...);
 	using return_type = Ret;
 	using stl_function_type = std::function<function_type>;
-	using pointer = Ret(*)(Args...);
+	using pointer = Ret (*)(Args...);
 	using tuple_type =
 		std::tuple<std::decay_t<Args>...>; // 需要移除掉输入参数的引用类型
 	template <size_t I>
@@ -58,7 +58,7 @@ struct function_traits<Ret(Args...)>
 
 // 函数指针
 template <typename Ret, typename... Args>
-struct function_traits<Ret(*)(Args...)> : function_traits<Ret(Args...)>
+struct function_traits<Ret (*)(Args...)> : function_traits<Ret(Args...)>
 {
 };
 
@@ -70,12 +70,12 @@ struct function_traits<std::function<Ret(Args...)>>
 };
 
 // 类成员函数
-#define FUNCTION_TRAITS(...)                                      \
-  template <typename Ret, typename ClassType, typename... Args>   \
-  struct function_traits<Ret (ClassType::*)(Args...) __VA_ARGS__> \
-	  : function_traits<Ret(Args...)>                             \
-  {                                                               \
-  };
+#define FUNCTION_TRAITS(...)                                        \
+	template <typename Ret, typename ClassType, typename... Args>   \
+	struct function_traits<Ret (ClassType::*)(Args...) __VA_ARGS__> \
+		: function_traits<Ret(Args...)>                             \
+	{                                                               \
+	};
 
 FUNCTION_TRAITS()
 FUNCTION_TRAITS(const)
@@ -91,7 +91,7 @@ struct function_traits : function_traits<decltype(&Callable::operator())>
 // lambda到function的变换
 template <typename Function>
 typename function_traits<Function>::stl_function_type
-to_function(const Function& lambda)
+to_function(const Function &lambda)
 {
 	return static_cast<typename function_traits<Function>::stl_function_type>(
 		lambda);
@@ -100,7 +100,7 @@ to_function(const Function& lambda)
 // lambda到function的变换
 template <typename Function>
 typename function_traits<Function>::stl_function_type
-to_function(Function&& lambda)
+to_function(Function &&lambda)
 {
 	return static_cast<typename function_traits<Function>::stl_function_type>(
 		std::forward<Function>(lambda));
@@ -108,31 +108,31 @@ to_function(Function&& lambda)
 
 template <typename Function>
 typename function_traits<Function>::pointer
-to_function_pointer(const Function& lambda)
+to_function_pointer(const Function &lambda)
 {
 	return static_cast<typename function_traits<Function>::pointer()>(lambda);
 }
 
 // 动态索引tuple
 template <size_t n, typename... Args>
-constexpr std::variant<Args...> _tuple_index(std::tuple<Args...>& tp,
-	size_t i)
+constexpr std::variant<Args...> _tuple_index(std::tuple<Args...> &tp,
+											 size_t i)
 {
 	if (n == i)
 		return std::variant<Args...>{std::in_place_index<n>, std::get<n>(tp)};
-	return _tuple_index < n < sizeof...(Args) - 1 ? n + 1 : 0 >(tp, i);
+	return _tuple_index < n < sizeof...(Args) - 1 ? n + 1 : 0 > (tp, i);
 }
 template <typename... Args>
-constexpr std::variant<Args...> tuple_index(std::tuple<Args...>& tp, size_t i)
+constexpr std::variant<Args...> tuple_index(std::tuple<Args...> &tp, size_t i)
 {
 	return _tuple_index<0>(tp, i);
 }
 template <typename T0, typename... Ts>
-std::ostream& operator<<(std::ostream& os, std::variant<T0, Ts...> const& v)
+std::ostream &operator<<(std::ostream &os, std::variant<T0, Ts...> const &v)
 {
-	visit([&](auto&& x)
-		{ os << x; },
-		v);
+	visit([&](auto &&x)
+		  { os << x; },
+		  v);
 	return os;
 }
 
@@ -140,56 +140,56 @@ std::ostream& operator<<(std::ostream& os, std::variant<T0, Ts...> const& v)
 struct ListNode
 {
 	int val;
-	ListNode* next;
+	ListNode *next;
 	ListNode() : val(0), next(nullptr) {}
 	ListNode(int x) : val(x), next(nullptr) {}
-	ListNode(int x, ListNode* next) : val(x), next(next) {}
+	ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
 // 二叉树
 struct TreeNode
 {
 	int val;
-	TreeNode* left;
-	TreeNode* right;
+	TreeNode *left;
+	TreeNode *right;
 	TreeNode() : val(0), left(nullptr), right(nullptr) {}
 	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-	TreeNode(int x, TreeNode* left, TreeNode* right)
+	TreeNode(int x, TreeNode *left, TreeNode *right)
 		: val(x), left(left), right(right) {}
 };
 
 // 打印链表
-inline void prettyPrintLinkedList(ListNode* node)
+inline void prettyPrintLinkedList(ListNode *node)
 {
 	while (node && node->next)
 	{
-		fmt::print("{}->", node->val);
+		std::cout << node->val << "->";
 		node = node->next;
 	}
 
 	if (node)
 	{
-		fmt::print("{}",node->val);
+		std::cout << node->val << std::endl;
 	}
 	else
 	{
-		fmt::print("Empty LinkedList") ;
+		std::cout << "Empty LinkedList" << std::endl;
 	}
 }
 
-inline void trimLeftTrailingSpaces(std::string& input)
+inline void trimLeftTrailingSpaces(std::string &input)
 {
 	input.erase(input.begin(), find_if(input.begin(), input.end(),
-		[](int ch)
-		{ return !isspace(ch); }));
+									   [](int ch)
+									   { return !isspace(ch); }));
 }
 
-inline void trimRightTrailingSpaces(std::string& input)
+inline void trimRightTrailingSpaces(std::string &input)
 {
 	input.erase(
 		find_if(input.rbegin(), input.rend(), [](int ch)
-			{ return !isspace(ch); })
-		.base(),
+				{ return !isspace(ch); })
+			.base(),
 		input.end());
 }
 
@@ -254,7 +254,7 @@ inline std::vector<int> stringToIntegerVector(std::string input)
 	char delim = ',';
 	while (getline(ss, item, delim))
 	{
-		output.push_back(std::stoi(item));
+		output.push_back(stoi(item));
 	}
 	return output;
 }
@@ -386,7 +386,7 @@ inline std::vector<std::string> stringToStringVector(std::string input)
 }
 
 inline std::string integerVectorToString(std::vector<int> list,
-	int length = -1)
+										 int length = -1)
 {
 	if (length == -1)
 	{
@@ -407,14 +407,14 @@ inline std::string integerVectorToString(std::vector<int> list,
 	return "[" + result.substr(0, result.length() - 2) + "]";
 }
 
-inline ListNode* stringToListNode(std::string input)
+inline ListNode *stringToListNode(std::string input)
 {
 	// Generate list from the input
 	std::vector<int> list = stringToIntegerVector(input);
 
 	// Now convert that list into linked list
-	ListNode* dummyRoot = new ListNode(0);
-	ListNode* ptr = dummyRoot;
+	ListNode *dummyRoot = new ListNode(0);
+	ListNode *ptr = dummyRoot;
 	for (int item : list)
 	{
 		ptr->next = new ListNode(item);
@@ -425,7 +425,7 @@ inline ListNode* stringToListNode(std::string input)
 	return ptr;
 }
 
-inline std::string listNodeToString(ListNode* node)
+inline std::string listNodeToString(ListNode *node)
 {
 	if (node == nullptr)
 	{
@@ -441,12 +441,9 @@ inline std::string listNodeToString(ListNode* node)
 	return "[" + result.substr(0, result.length() - 2) + "]";
 }
 
-inline int stringToInteger(std::string input)
-{
-	return std::stoi(input);
-}
+inline int stringToInteger(std::string input) { return stoi(input); }
 
-inline std::string treeNodeToString(TreeNode* root)
+inline std::string treeNodeToString(TreeNode *root)
 {
 	if (root == nullptr)
 	{
@@ -454,11 +451,11 @@ inline std::string treeNodeToString(TreeNode* root)
 	}
 
 	std::string output = "";
-	std::queue<TreeNode*> q;
+	std::queue<TreeNode *> q;
 	q.push(root);
 	while (!q.empty())
 	{
-		TreeNode* node = q.front();
+		TreeNode *node = q.front();
 		q.pop();
 
 		if (node == nullptr)
@@ -476,7 +473,7 @@ inline std::string treeNodeToString(TreeNode* root)
 
 // 打印数组 重载cout
 template <typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& arr)
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &arr)
 {
 	os << "[";
 	for (int i = 0; i < arr.size(); i++)
@@ -490,8 +487,8 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& arr)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os,
-	const std::vector<std::vector<T>>& arr)
+std::ostream &operator<<(std::ostream &os,
+						 const std::vector<std::vector<T>> &arr)
 {
 	os << "[";
 	for (int i = 0; i < arr.size(); i++)
@@ -512,8 +509,8 @@ std::ostream& operator<<(std::ostream& os,
 }
 
 template <typename T, typename U>
-std::ostream& operator<<(std::ostream& os,
-	const std::vector<std::pair<T, U>>& arr)
+std::ostream &operator<<(std::ostream &os,
+						 const std::vector<std::pair<T, U>> &arr)
 {
 	os << "[";
 	for (int i = 0; i < arr.size(); i++)
@@ -526,8 +523,8 @@ std::ostream& operator<<(std::ostream& os,
 	return os;
 }
 
-inline void prettyPrintTree(TreeNode* node, std::string prefix = "",
-	bool isLeft = true)
+inline void prettyPrintTree(TreeNode *node, std::string prefix = "",
+							bool isLeft = true)
 {
 	if (node == nullptr)
 	{
@@ -539,14 +536,14 @@ inline void prettyPrintTree(TreeNode* node, std::string prefix = "",
 		prettyPrintTree(node->right, prefix + (isLeft ? "│   " : "    "), false);
 	}
 	std::cout << prefix + (isLeft ? "└── " : "┌── ") + std::to_string(node->val) +
-		"\n";
+					 "\n";
 	if (node->left)
 	{
 		prettyPrintTree(node->left, prefix + (isLeft ? "    " : "│   "), true);
 	}
 }
 
-inline TreeNode* stringToTreeNode(std::string input)
+inline TreeNode *stringToTreeNode(std::string input)
 {
 	trimLeftTrailingSpaces(input);
 	trimRightTrailingSpaces(input);
@@ -561,13 +558,13 @@ inline TreeNode* stringToTreeNode(std::string input)
 	ss.str(input);
 
 	getline(ss, item, ',');
-	TreeNode* root = new TreeNode(std::stoi(item));
-	std::queue<TreeNode*> nodeQueue;
+	TreeNode *root = new TreeNode(stoi(item));
+	std::queue<TreeNode *> nodeQueue;
 	nodeQueue.push(root);
 
 	while (true)
 	{
-		TreeNode* node = nodeQueue.front();
+		TreeNode *node = nodeQueue.front();
 		nodeQueue.pop();
 
 		if (!getline(ss, item, ','))
@@ -578,7 +575,7 @@ inline TreeNode* stringToTreeNode(std::string input)
 		trimLeftTrailingSpaces(item);
 		if (item != "null")
 		{
-			int leftNumber = std::stoi(item);
+			int leftNumber = stoi(item);
 			node->left = new TreeNode(leftNumber);
 			nodeQueue.push(node->left);
 		}
@@ -591,7 +588,7 @@ inline TreeNode* stringToTreeNode(std::string input)
 		trimLeftTrailingSpaces(item);
 		if (item != "null")
 		{
-			int rightNumber = std::stoi(item);
+			int rightNumber = stoi(item);
 			node->right = new TreeNode(rightNumber);
 			nodeQueue.push(node->right);
 		}
@@ -599,13 +596,13 @@ inline TreeNode* stringToTreeNode(std::string input)
 	return root;
 }
 
-inline std::ostream& operator<<(std::ostream& os, ListNode* head)
+inline std::ostream &operator<<(std::ostream &os, ListNode *head)
 {
 	prettyPrintLinkedList(head);
 	return os;
 }
 
-inline std::ostream& operator<<(std::ostream& os, TreeNode* root)
+inline std::ostream &operator<<(std::ostream &os, TreeNode *root)
 {
 	prettyPrintTree(root);
 	return os;
@@ -624,79 +621,79 @@ inline double stringToDouble(std::string input) { return stod(input); }
 // enable_if 重载
 template <typename T>
 typename std::enable_if<std::is_same<T, std::string>::value, void>::type
-stringToTarget(std::string& s, T& t)
+stringToTarget(std::string &s, T &t)
 {
 	t = stringToString(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, double>::value, void>::type
-stringToTarget(std::string& s, T& t)
+stringToTarget(std::string &s, T &t)
 {
 	t = stringToDouble(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, int>::value, void>::type
-stringToTarget(std::string s, T& t)
+stringToTarget(std::string s, T &t)
 {
 	t = stringToInteger(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, std::vector<int>>::value, void>::type
-stringToTarget(std::string s, T& t)
+stringToTarget(std::string s, T &t)
 {
 	t = stringToIntegerVector(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, std::vector<char>>::value, void>::type
-stringToTarget(std::string s, T& t)
+stringToTarget(std::string s, T &t)
 {
 	t = stringToCharVector(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, std::vector<std::vector<int>>>::value,
-	void>::type
-	stringToTarget(std::string s, T& t)
+						void>::type
+stringToTarget(std::string s, T &t)
 {
 	t = stringTo2dIntegerVector(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, std::vector<std::vector<char>>>::value,
-	void>::type
-	stringToTarget(std::string s, T& t)
+						void>::type
+stringToTarget(std::string s, T &t)
 {
 	t = stringTo2dCharVector(s);
 }
 
 template <typename T>
 typename std::enable_if<std::is_same<T, std::vector<std::string>>::value,
-	void>::type
-	stringToTarget(std::string s, T& t)
+						void>::type
+stringToTarget(std::string s, T &t)
 {
 	t = stringToStringVector(s);
 }
 
 template <typename T>
-typename std::enable_if<std::is_same<T, ListNode*>::value, void>::type
-stringToTarget(std::string s, T& t)
+typename std::enable_if<std::is_same<T, ListNode *>::value, void>::type
+stringToTarget(std::string s, T &t)
 {
 	t = stringToListNode(s);
 }
 
 template <typename T>
-typename std::enable_if<std::is_same<T, TreeNode*>::value, void>::type
-stringToTarget(std::string s, T& t)
+typename std::enable_if<std::is_same<T, TreeNode *>::value, void>::type
+stringToTarget(std::string s, T &t)
 {
 	t = stringToTreeNode(s);
 }
 
 template <size_t I = 0, typename Tuple, typename Array>
-void ArrayToTuple(Array& arr, Tuple&& tp)
+void ArrayToTuple(Array &arr, Tuple &&tp)
 {
 	if constexpr (I == std::tuple_size<std::decay_t<Tuple>>::value)
 		return;
@@ -710,10 +707,10 @@ void ArrayToTuple(Array& arr, Tuple&& tp)
 template <typename T>
 struct MemberFunctionBase
 {
-	virtual void operator()(T* obj, std::vector<std::string>& strArg)
+	virtual void operator()(T *obj, std::vector<std::string> &strArg)
 	{
 	} // 需要虚函数调用子类函数
-	virtual ~MemberFunctionBase() {};
+	virtual ~MemberFunctionBase(){};
 };
 
 template <typename T, typename F>
@@ -729,8 +726,8 @@ struct MemberFunction : public MemberFunctionBase<T>
 
 	// 输出位置
 	template <size_t... Is>
-	void exec(T* obj, std::vector<std::string>& strArg,
-		std::index_sequence<Is...>)
+	void exec(T *obj, std::vector<std::string> &strArg,
+			  std::index_sequence<Is...>)
 	{
 		// 将传入的string参数，转化为函数实际参数类型，存在tuple里
 		tuple_type tpArg;
@@ -742,10 +739,10 @@ struct MemberFunction : public MemberFunctionBase<T>
 		}
 		else
 		{ // 如果具有非空返回值，那么打印出来，前面已经对cout实现了重载
-			std::cout << (*obj.*m_func)(std::get<Is>(tpArg)...);
+			std::cout << (*obj.*m_func)(std::get<Is>(tpArg)...) << std::endl;
 		}
 	}
-	void operator()(T* obj, std::vector<std::string>& strArg)
+	void operator()(T *obj, std::vector<std::string> &strArg)
 	{
 		// 为了展开参数，使用了index_sequence
 		exec(obj, strArg, std::make_index_sequence<I>());
@@ -760,7 +757,7 @@ public:
 	std::vector<std::string> inputs;
 	std::vector<std::string> functionNameArray;
 	std::vector<std::string> functionArgArray;
-	T* instance;
+	T *instance;
 
 public:
 	Excecutor(std::string path) : instance(nullptr) { parsefromInputs(path); };
@@ -774,7 +771,7 @@ public:
 
 	// 创建 Solution 的实例
 	template <typename Args>
-	T* createInstance()
+	T *createInstance()
 	{
 		if constexpr (simpleExcecutor)
 		{
@@ -837,7 +834,7 @@ public:
 	}
 
 	template <typename F>
-	void registerMemberFunction(std::string s, F&& func)
+	void registerMemberFunction(std::string s, F &&func)
 	{
 		// 把它们先上行转化，存入到funcmap里
 		// 在调用的时候，通过调用父类的虚函数operator()()方法，来调用到子类的成员函数

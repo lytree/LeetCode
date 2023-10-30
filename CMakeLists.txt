@@ -8,9 +8,12 @@ find_package(fmt CONFIG REQUIRED)
 add_executable(LeetCode main.cpp)
 add_executable(all_2 src/all/2.cpp)
 add_executable(all_3 src/all/3.cpp)
-
+add_executable(all_12 src/all/12.cpp)
+add_executable(all_13 src/all/13.cpp)
 target_link_libraries(all_2 PRIVATE fmt::fmt)
 target_link_libraries(all_3 PRIVATE fmt::fmt)
+target_link_libraries(all_12 PRIVATE fmt::fmt)
+target_link_libraries(all_13 PRIVATE fmt::fmt)
 target_link_libraries(LeetCode PRIVATE fmt::fmt)
 
 

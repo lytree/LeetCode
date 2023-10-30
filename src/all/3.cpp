@@ -1,4 +1,9 @@
 #include "../header.h"
+/**
+ * 双指针
+ * 
+ * 
+ **/
 namespace longest_substring_without_repeating_characters
 {
 	class Solution
@@ -14,7 +19,7 @@ namespace longest_substring_without_repeating_characters
 			{
 				if (left_index != 0)
 				{
-					occ.erase(s[left_index - 1]);
+					occ.erase(s[left_index - 1]);//将出现重复之前的字符全部删除
 				}
 				while (right_index + 1 < s_length && !occ.count(s[right_index + 1]))
 				{
@@ -27,20 +32,6 @@ namespace longest_substring_without_repeating_characters
 
 			return res;
 		};
-		int lengthOfLongestSubstringV2(std::string s)
-		{
-
-			std::unordered_map<char, int> dic;
-			int i = -1, res = 0, len = s.size();
-			for (int j = 0; j < len; j++)
-			{
-				if (dic.find(s[j]) != dic.end())
-					i = std::max(i, dic.find(s[j])->second); // 更新左指针
-				dic[s[j]] = j;							// 哈希表记录
-				res = std::max(res, j - i);				// 更新结果
-			}
-			return res;
-		};
 	};
 } // namespace validate_stack_sequences
 #define longest_substring_without_repeating_characters_fun(func) exc.registerMemberFunction(#func, &longest_substring_without_repeating_characters::Solution::func);
@@ -49,6 +40,6 @@ int main()
 {
 	Excecutor<longest_substring_without_repeating_characters::Solution, false> exc("../resource/all/3.txt");
 	exc.instance = exc.createInstance<void>();
-	longest_substring_without_repeating_characters_fun(lengthOfLongestSubstringV2);
+	longest_substring_without_repeating_characters_fun(lengthOfLongestSubstring);
 	exc.run();
 }

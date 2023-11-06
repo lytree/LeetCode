@@ -24,7 +24,7 @@ namespace two_sum
 } // namespace two_sum
 int main()
 {
-  Excecutor<two_sum::Solution, false> exc("../resource/all/1.txt");
+  Excecutor<two_sum::Solution, true> exc("../resource/all/1.txt");
   exc.instance = exc.createInstance<void>();
   two_sum_fun(twoSum);
   exc.run();

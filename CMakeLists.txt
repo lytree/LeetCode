@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(fmt CONFIG REQUIRED)
 
 add_executable(LeetCode main.cpp)
+add_executable(all_1 src/all/1.cpp)
 add_executable(all_2 src/all/2.cpp)
 add_executable(all_3 src/all/3.cpp)
 add_executable(all_12 src/all/12.cpp)

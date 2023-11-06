@@ -38,7 +38,7 @@ namespace longest_substring_without_repeating_characters
 
 int main()
 {
-	Excecutor<longest_substring_without_repeating_characters::Solution, false> exc("../resource/all/3.txt");
+	Excecutor<longest_substring_without_repeating_characters::Solution, true> exc("../resource/all/3.txt");
 	exc.instance = exc.createInstance<void>();
 	longest_substring_without_repeating_characters_fun(lengthOfLongestSubstring);
 	exc.run();

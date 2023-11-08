@@ -20,6 +20,10 @@ namespace validate_binary_search_tree
         {
             return isValid(root, LONG_MIN, LONG_MAX);
         }
+        /**
+         * 前序遍历 中左右
+         *
+         **/
         bool isValid(TreeNode *root, long lower, long upper)
         {
             if (root == nullptr)

@@ -55,6 +55,7 @@ namespace recover_binary_search_tree
                 pre = root;
                 root = root->right;
             }
+            std::swap(x->val, y->val);
         }
     };
 } // namespace recover_binary_search_tree

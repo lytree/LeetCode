@@ -57,6 +57,44 @@ namespace recover_binary_search_tree
             }
             std::swap(x->val, y->val);
         }
+
+        TreeNode *x = nullptr;
+        TreeNode *y = nullptr;
+        TreeNode *pre = nullptr;
+
+        void recoverTree1(TreeNode *root)
+        {
+            dfs(root);
+
+            std::swap(x->val, y->val);
+        }
+        void dfs(TreeNode *root)
+        {
+            if (root == nullptr)
+            {
+                return;
+            }
+            dfs(root->left);
+
+            if (pre != nullptr)
+            {
+                if (pre->val > root->val)
+                {
+                    if (x == nullptr)
+                    {
+                        x = pre;
+                        y = root; // 防止当前位置就是交换的位置
+                    }
+                    else
+                    {
+                        y = root;
+                        return;
+                    }
+                }
+            }
+            pre = root;
+            dfs(root->right);
+        }
     };
 } // namespace recover_binary_search_tree
 #define recover_binary_search_tree_fun(func) exc.registerMemberFunction(#func, &recover_binary_search_tree::Solution::func);
@@ -66,5 +104,7 @@ int main()
     Excecutor<recover_binary_search_tree::Solution, true> exc("../resource/all/99.txt");
     exc.instance = exc.createInstance<void>();
     recover_binary_search_tree_fun(recoverTree);
+    exc.run();
+    recover_binary_search_tree_fun(recoverTree1);
     exc.run();
 }

@@ -51,9 +51,40 @@ namespace binary_tree_inorder_traversal
             }
             return res;
         }
+        // todo 暂时未搞清楚原理
         std::vector<int> inorderTraversalV3(TreeNode *root)
         {
             std::vector<int> res;
+            TreeNode *pre = nullptr;
+
+            while (root != nullptr)
+            {
+                if (root->left != nullptr)
+                {
+                    pre = root->left;
+                    while (pre->right != nullptr && pre->right != root)
+                    {
+                        pre = pre->right;
+                    }
+                    if (pre->right == nullptr)
+                    {
+                        pre->right = root;
+                        root = root->left;
+                    }
+                    else
+                    {
+                        res.push_back(root->val);
+                        pre->right = nullptr;
+                        root = root->right;
+                    }
+                }
+                else
+                {
+                    res.push_back(root->val);
+                    root = root->right;
+                }
+            }
+
             return res;
         }
     };
@@ -64,6 +95,6 @@ int main()
 {
     Excecutor<binary_tree_inorder_traversal::Solution, true> exc("../resource/all/94.txt");
     exc.instance = exc.createInstance<void>();
-    binary_tree_inorder_traversal_fun(inorderTraversalV2);
+    binary_tree_inorder_traversal_fun(inorderTraversalV3);
     exc.run();
 }

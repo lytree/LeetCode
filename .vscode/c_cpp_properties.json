@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/build/vcpkg_installed/x64-linux/include/**"
+                "${workspaceFolder}/build/vcpkg_installed/x64-linux/include/**",
                 "${workspaceFolder}/build/build/x64-debug/vcpkg_installed/x64-linux/include/**"
             ],
             "defines": [
